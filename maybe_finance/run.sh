@@ -1,27 +1,21 @@
 #!/bin/bash
-set -ex
+set -ex  # Enable verbose logging for debugging
 
-# Log start of script
-echo "Starting Maybe Finance Add-on..."
-
-# Check if the environment variables are correctly set
+# Log environment variables for debugging
 echo "Environment Variables:"
 echo "POSTGRES_USER=$POSTGRES_USER"
 echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
 echo "POSTGRES_DB=$POSTGRES_DB"
 
-
+# Define PostgreSQL data directory
 export PGDATA=/data/postgres
 
+# Ensure the PostgreSQL data directory exists
+mkdir -p "$PGDATA"
+chown -R postgres:postgres "$PGDATA"
+chmod -R 700 "$PGDATA"
 
-# Initialize PostgreSQL directory if necessary
-if [ ! -d "$PGDATA" ]; then
-    echo "Initializing PostgreSQL data directory..."
-    mkdir -p "$PGDATA"
-    chown postgres:postgres "$PGDATA"
-    chmod 700 "$PGDATA"
-    sudo -u postgres initdb --pgdata="$PGDATA"
-fi
+
 
 # Configure PostgreSQL
 echo "Configuring PostgreSQL..."
@@ -30,15 +24,18 @@ echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
 
 # Start PostgreSQL
 echo "Starting PostgreSQL..."
-sudo -u postgres pg_ctl -D "$PGDATA" -l /var/log/postgres.log start || exit 1
+sudo -u postgres pg_ctl -D "$PGDATA" -o "-c logging_collector=off -c log_statement=all -c log_destination=stderr" start
 
-# Wait for PostgreSQL readiness
+# Wait for PostgreSQL to be ready
 echo "Waiting for PostgreSQL readiness..."
 until sudo -u postgres pg_isready; do
     sleep 1
 done
 
-# Create database and user
+echo "Testing PostgreSQL connection..."
+PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT 1;" || exit 1
+
+# Create database and user if not already present
 echo "Creating database and user..."
 sudo -u postgres psql <<-EOSQL
 DO \$\$
@@ -53,9 +50,6 @@ END
 \$\$;
 EOSQL
 
-
-
-
-# Start the Rails application
+# Start Rails application
 echo "Starting Rails application..."
-exec /rails/bin/docker-entrypoint "./bin/rails" "server"
+exec /rails/bin/docker-entrypoint "./bin/rails" "server" -e production -b 0.0.0.0 --verbose
