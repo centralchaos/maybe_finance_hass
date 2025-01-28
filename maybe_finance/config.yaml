@@ -1,7 +1,7 @@
-name: "Hello world"
-description: "My first real add-on!"
-version: "1.0.0"
-slug: "hello_world"
+name: "Maybe Finance"
+description: "Maybe Finance is a personal finance management application that helps you track your expenses, income, and investments."
+version: "1.0.1"
+slug: "maybe_finance"
 init: false
 arch:
   - aarch64
@@ -9,3 +9,15 @@ arch:
   - armhf
   - armv7
   - i386
+startup: application
+boot: auto
+options:
+  postgres_user: maybe_user
+  postgres_password: maybe_password
+  postgres_db: maybe_db
+schema:
+  postgres_user: str
+  postgres_password: str
+  postgres_db: str
+ports:
+  3000/tcp: 3000
