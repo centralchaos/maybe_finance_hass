@@ -10,6 +10,10 @@ echo "POSTGRES_USER=$POSTGRES_USER"
 echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
 echo "POSTGRES_DB=$POSTGRES_DB"
 
+
+export PGDATA=/data/postgres
+
+
 # Initialize PostgreSQL directory if necessary
 if [ ! -d "$PGDATA" ]; then
     echo "Initializing PostgreSQL data directory..."
@@ -48,6 +52,9 @@ BEGIN
 END
 \$\$;
 EOSQL
+
+
+
 
 # Start the Rails application
 echo "Starting Rails application..."

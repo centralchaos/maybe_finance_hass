@@ -1,6 +1,6 @@
 name: "Maybe Finance"
 description: "Maybe Finance is a personal finance management application that helps you track your expenses, income, and investments."
-version: "1.0.4"
+version: "1.0.5"
 slug: "maybe_finance"
 init: false
 arch:
@@ -25,3 +25,6 @@ environment:
   POSTGRES_USER: "{options.postgres_user}"
   POSTGRES_PASSWORD: "{options.postgres_password}"
   POSTGRES_DB: "{options.postgres_db}"
+map:
+  # Persist PostgreSQL data directory
+  /data: persistent
