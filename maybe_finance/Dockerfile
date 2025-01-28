@@ -1,14 +1,23 @@
 FROM ghcr.io/maybe-finance/maybe:stable
 
-# Install PostgreSQL dependencies
-RUN apt-get update && apt-get install -y \
-    postgresql \
-    postgresql-contrib \
-    && rm -rf /var/lib/apt/lists/*
+# Switch to root for package installation
+USER root
+
+# Install PostgreSQL and sudo with proper cleanup
+RUN apt-get update && \
+    apt-get install -y postgresql postgresql-contrib sudo && \
+    rm -rf /var/lib/apt/lists/*
+
+# Configure sudo for rails user
+RUN echo "rails ALL=(postgres) NOPASSWD:ALL" >> /etc/sudoers.d/rails-postgres && \
+    chmod 0440 /etc/sudoers.d/rails-postgres
 
 # Copy our run script
 COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
-# Preserve any existing entrypoint/cmd from base image
+# Switch back to application user
+USER 1000:1000
+
+# Use our script as entrypoint
 ENTRYPOINT ["/run.sh"]
