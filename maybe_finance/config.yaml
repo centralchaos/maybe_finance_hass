@@ -1,6 +1,5 @@
 name: "Maybe Finance"
 description: "Maybe Finance is a personal finance management application that helps you track your expenses, income, and investments."
-version: "1.0.7"
 slug: "maybe_finance"
 init: false
 arch:
@@ -12,22 +11,23 @@ arch:
 startup: application
 boot: auto
 options:
+  postgres_host: "addon_core_postgresql"
   postgres_user: maybe_user
   postgres_password: maybe_password
   postgres_db: maybe_db
 schema:
+  postgres_host: str
   postgres_user: str
   postgres_password: str
   postgres_db: str
 ports:
   3000/tcp: 3001
 environment:
+  POSTGRES_HOST: "{options.postgres_host}"
   POSTGRES_USER: "{options.postgres_user}"
   POSTGRES_PASSWORD: "{options.postgres_password}"
   POSTGRES_DB: "{options.postgres_db}"
-  POSTGRES_HOST: "localhost"
-#map:
-#  - type: data # This maps the /data directory for persistent storage
-#    read_only: False
 map:
   - "data:rw"
+image: ghcr.io/maybe-finance/maybe
+version: 0.3.0
