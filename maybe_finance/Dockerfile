@@ -1,0 +1,11 @@
+ARG BUILD_ARCH
+FROM --platform=${BUILD_ARCH} ghcr.io/maybe-finance/maybe:0.3.0
+
+# Set environment variables
+ENV POSTGRES_HOST=${POSTGRES_HOST}
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+ENV POSTGRES_DB=${POSTGRES_DB}
+
+# Expose the application port
+EXPOSE 3000

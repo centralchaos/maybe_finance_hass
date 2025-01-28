@@ -5,15 +5,13 @@ init: false
 arch:
   - aarch64
   - amd64
-  - armhf
   - armv7
-  - i386
 startup: application
 boot: auto
 options:
-  postgres_host: "addon_core_postgresql"
+  postgres_host: "addon_postgres"
   postgres_user: maybe_user
-  postgres_password: maybe_password
+  postgres_password: homeassistant
   postgres_db: maybe_db
 schema:
   postgres_host: str
@@ -29,5 +27,8 @@ environment:
   POSTGRES_DB: "{options.postgres_db}"
 map:
   - "data:rw"
-image: ghcr.io/maybe-finance/maybe
+build:
+  dockerfile: Dockerfile
+  args:
+    BUILD_ARCH: "{arch}"
 version: 0.3.0
