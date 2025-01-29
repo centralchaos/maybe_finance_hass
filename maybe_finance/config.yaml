@@ -1,6 +1,8 @@
-name: "Maybe Finance"
-description: "Maybe Finance is a personal finance management application that helps you track your expenses, income, and investments."
-slug: "maybe_finance"
+name: Maybe Finance
+description: >-
+  Maybe Finance is a personal finance management application that helps you
+  track your expenses, income, and investments.
+slug: maybe_finance
 init: false
 arch:
   - aarch64
@@ -9,22 +11,57 @@ arch:
 startup: application
 boot: auto
 options:
-  postgres_host: "addon_postgres"
-  postgres_user: maybe_user
+  postgres_host: addon_postgres
+  postgres_user: postgres
   postgres_password: homeassistant
-  postgres_db: maybe_db
+  postgres_db: maybe_finance_db
+  secret_key_base: ""
+  smtp_address: ""
+  smtp_port: 465
+  smtp_username: ""
+  smtp_password: ""
+  smtp_tls_enabled: true
+  email_sender: ""
+  app_domain: ""
+  synth_api_key: ""
+  require_invite_code: false
+  disable_ssl: false
 schema:
   postgres_host: str
   postgres_user: str
   postgres_password: str
   postgres_db: str
-ports:
-  3000/tcp: 3001
+  secret_key_base: str
+  smtp_address: str
+  smtp_port: int
+  smtp_username: str
+  smtp_password: str
+  smtp_tls_enabled: bool
+  email_sender: str
+  app_domain: str
+  synth_api_key: str
+  require_invite_code: bool
+  disable_ssl: bool
 environment:
   POSTGRES_HOST: "{options.postgres_host}"
+  DB_HOST: "{options.postgres_host}"
+  DB_PORT: "5432"
   POSTGRES_USER: "{options.postgres_user}"
   POSTGRES_PASSWORD: "{options.postgres_password}"
   POSTGRES_DB: "{options.postgres_db}"
+  SECRET_KEY_BASE: "{options.secret_key_base}"
+  SMTP_ADDRESS: "{options.smtp_address}"
+  SMTP_PORT: "{options.smtp_port}"
+  SMTP_USERNAME: "{options.smtp_username}"
+  SMTP_PASSWORD: "{options.smtp_password}"
+  SMTP_TLS_ENABLED: "{options.smtp_tls_enabled}"
+  EMAIL_SENDER: "{options.email_sender}"
+  APP_DOMAIN: "{options.app_domain}"
+  SYNTH_API_KEY: "{options.synth_api_key}"
+  REQUIRE_INVITE_CODE: "{options.require_invite_code}"
+  DISABLE_SSL: "{options.disable_ssl}"
+ports:
+  3000/tcp: 3001
 map:
   - "data:rw"
 build:
