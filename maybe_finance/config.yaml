@@ -10,56 +10,7 @@ arch:
   - armv7
 startup: application
 boot: auto
-options:
-  postgres_host: addon_postgres
-  postgres_user: postgres
-  postgres_password: homeassistant
-  postgres_db: maybe_finance_db
-  secret_key_base: ""
-  smtp_address: ""
-  smtp_port: 465
-  smtp_username: ""
-  smtp_password: ""
-  smtp_tls_enabled: true
-  email_sender: ""
-  app_domain: ""
-  synth_api_key: ""
-  require_invite_code: false
-  disable_ssl: false
-schema:
-  postgres_host: str
-  postgres_user: str
-  postgres_password: str
-  postgres_db: str
-  secret_key_base: str
-  smtp_address: str
-  smtp_port: int
-  smtp_username: str
-  smtp_password: str
-  smtp_tls_enabled: bool
-  email_sender: str
-  app_domain: str
-  synth_api_key: str
-  require_invite_code: bool
-  disable_ssl: bool
-environment:
-  POSTGRES_HOST: "{options.postgres_host}"
-  DB_HOST: "{options.postgres_host}"
-  DB_PORT: "5432"
-  POSTGRES_USER: "{options.postgres_user}"
-  POSTGRES_PASSWORD: "{options.postgres_password}"
-  POSTGRES_DB: "{options.postgres_db}"
-  SECRET_KEY_BASE: "{options.secret_key_base}"
-  SMTP_ADDRESS: "{options.smtp_address}"
-  SMTP_PORT: "{options.smtp_port}"
-  SMTP_USERNAME: "{options.smtp_username}"
-  SMTP_PASSWORD: "{options.smtp_password}"
-  SMTP_TLS_ENABLED: "{options.smtp_tls_enabled}"
-  EMAIL_SENDER: "{options.email_sender}"
-  APP_DOMAIN: "{options.app_domain}"
-  SYNTH_API_KEY: "{options.synth_api_key}"
-  REQUIRE_INVITE_CODE: "{options.require_invite_code}"
-  DISABLE_SSL: "{options.disable_ssl}"
+
 ports:
   3000/tcp: 3001
 map:
@@ -69,3 +20,90 @@ build:
   args:
     BUILD_ARCH: "{arch}"
 version: 0.3.0
+
+#options:
+#  # Database Configuration (matching Postgres addon by alexbelgium)
+#  db_host: 172.30.32.1 # Home Assistant's default gateway IP
+#  db_port: 5432
+#  postgres_user: postgres
+#  postgres_password: homeassistant # Default password from Postgres addon
+#
+#  # Invite & Hosting
+#  require_invite_code: false
+#  self_hosted: true
+#  hosting_platform: localhost
+#
+#  # Secret Key (MUST be set by user!)
+#  secret_key_base: "TEST"
+
+#schema:
+#  # Database
+#  db_host: str?
+#  db_port: int?
+#  postgres_user: str?
+#  postgres_password: password?
+#
+#  # Synth
+#  synth_api_key: str?
+#
+#  # SMTP
+#  smtp_address: str?
+#  smtp_port: int?
+#  smtp_username: str?
+#  smtp_password: str?
+#  smtp_tls_enabled: bool?
+#  email_sender: str?
+#
+#  # App
+#  app_domain: str?
+#
+#  # Invite & Hosting
+#  require_invite_code: bool?
+#  self_hosted: bool?
+#  hosting_platform: str?
+#
+#  # Secret Key (REQUIRED)
+#  secret_key_base: password
+#
+#  # Upgrades
+#  upgrades_enabled: bool?
+#  upgrades_mode: str?
+#  upgrades_target: str?
+#
+#  # GitHub
+#  github_repo_owner: str?
+#  github_repo_name: str?
+#  github_repo_branch: str?
+#
+#  # Active Storage
+#  active_storage_service: str?
+#  s3_access_key_id: str?
+#  s3_secret_access_key: str?
+#  s3_region: str?
+#  s3_bucket: str?
+#  cloudflare_account_id: str?
+#  cloudflare_access_key_id: str?
+#  cloudflare_secret_access_key: str?
+#  cloudflare_bucket: str?
+#
+#  # Stripe
+#  stripe_publishable_key: str?
+#  stripe_secret_key: str?
+#  stripe_webhook_secret: str?
+#
+#  # Plaid
+#  plaid_client_id: str?
+#  plaid_secret: str?
+#  plaid_env: str?
+environment:
+  DB_HOST: "172.30.32.1" # Home Assistant's default gateway IP
+  DB_PORT: "5432"
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: homeassistant # Default password from Postgres addon
+  SECRET_KEY_BASE: "TEST"
+  SELF_HOSTED: "true"
+  DISABLE_SSL: "true"
+  HOSTING_PLATFORM: "localhost"
+  APP_DOMAIN: "https://maybe.m123.dev"
+  FORGERY_PROTECTION_ORIGIN_CHECK: "false"
+  RAILS_FORCE_SSL: "false"
