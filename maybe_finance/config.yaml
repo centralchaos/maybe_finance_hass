@@ -27,8 +27,5 @@ environment:
   POSTGRES_PASSWORD: homeassistant # Default password from Postgres addon
   SECRET_KEY_BASE: "TEST"
   SELF_HOSTED: "true"
-  DISABLE_SSL: "true"
+  DISABLE_SSL: "false"
   HOSTING_PLATFORM: "localhost"
-  APP_DOMAIN: "https://maybe.m123.dev"
-  FORGERY_PROTECTION_ORIGIN_CHECK: "false"
-  RAILS_FORCE_SSL: "false"
