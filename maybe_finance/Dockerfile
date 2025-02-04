@@ -8,7 +8,7 @@ RUN apk add --no-cache git && \
 
 # Stage 2: Base image with necessary dependencies
 ARG BUILD_ARCH
-FROM --platform=${BUILD_ARCH} ruby:3.3.5-slim AS base
+FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
 
 # Install base packages
 RUN apt-get update -qq && \
