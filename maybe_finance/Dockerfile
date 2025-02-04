@@ -48,21 +48,23 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 FROM base
 
 # Clean up
-#RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
+# Copy startup script **before switching to non-root user**
+COPY run.sh /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh
+
 # Setup non-root user
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails
+    chown -R rails:rails /rails /usr/local/bin/run.sh
 
-# Copy startup script
-COPY run.sh /usr/local/bin/run.sh
-RUN chmod +x /usr/local/bin/run.sh
+# Switch to non-root user **after setting permissions**
+USER rails
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/usr/local/bin/run.sh"]

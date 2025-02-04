@@ -16,4 +16,6 @@ export DISABLE_SSL="false"
 export HOSTING_PLATFORM="localhost"
 
 # Start the Rails server
-exec ./bin/rails server
+#exec ./bin/rails server
+# Execute the original entrypoint and default command
+exec /rails/bin/docker-entrypoint ./bin/rails server
