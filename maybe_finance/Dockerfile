@@ -6,13 +6,15 @@ RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
     git checkout tags/v0.3.0
 
-# Stage 2: Build the application using the original Dockerfile structure
+# Stage 2: Base image with necessary dependencies
 ARG BUILD_ARCH
 FROM --platform=${BUILD_ARCH} ruby:3.3.5-slim AS base
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libvips postgresql-client
+    apt-get install --no-install-recommends -y \
+    curl libvips postgresql-client jq bash && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set production environment
 ENV RAILS_ENV="production" \
@@ -29,7 +31,9 @@ FROM base AS build
 
 # Install build dependencies
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config
+    apt-get install --no-install-recommends -y \
+    build-essential git libpq-dev pkg-config && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install gems
 RUN bundle install && \
@@ -44,7 +48,7 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 FROM base
 
 # Clean up
-RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
+#RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts
 COPY --from=build /usr/local/bundle /usr/local/bundle
@@ -56,9 +60,12 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER rails
 
+# Copy startup script
+COPY run.sh /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh
+
 # Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["/usr/local/bin/run.sh"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3001
-CMD ["./bin/rails", "server"]
