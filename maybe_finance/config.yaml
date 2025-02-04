@@ -35,4 +35,4 @@ build:
   dockerfile: Dockerfile
   args:
     BUILD_ARCH: "{arch}"
-version: 0.3.5
+version: 0.3.6
