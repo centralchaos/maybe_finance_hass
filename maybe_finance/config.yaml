@@ -11,7 +11,7 @@ arch:
 startup: application
 boot: auto
 ports:
-  3001/tcp: 3001
+  3000/tcp: 3001
 map:
   - "data:rw"
 schema:
@@ -24,4 +24,4 @@ build:
   dockerfile: Dockerfile
   args:
     BUILD_ARCH: "{arch}"
-version: 0.3.1
+version: 0.3.4

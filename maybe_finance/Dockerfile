@@ -54,20 +54,17 @@ RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
-# Copy startup script **before switching to non-root user**
+# Copy startup script
 COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
-# Setup non-root user
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails /rails /usr/local/bin/run.sh
+# Set permissions to avoid issues with config file
+RUN mkdir -p /data && chmod -R 777 /data
 
-# Switch to non-root user **after setting permissions**
-USER rails
+# Keep running as root (no user switch)
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/usr/local/bin/run.sh"]
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 3001
+EXPOSE 3000
