@@ -17,11 +17,22 @@ map:
 schema:
   postgres_password: str
   secret_key_base: str
+  db_host: str?
+  db_port: str?
+  postgres_user: str?
+  app_domain: str
+  plaid_client_id: str?
+  plaid_secret: str?
+  plaid_env: str?
 options:
   postgres_password: "homeassistant"
   secret_key_base: "generate_a_secure_key_here"
+  db_host: "172.30.32.1"
+  db_port: "5432"
+  postgres_user: "postgres"
+  app_domain: "http://localhost"
 build:
   dockerfile: Dockerfile
   args:
     BUILD_ARCH: "{arch}"
-version: 0.3.4
+version: 0.3.5
