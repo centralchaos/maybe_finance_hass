@@ -41,9 +41,5 @@ export HOSTING_PLATFORM="localhost"
 [ -n "$PLAID_SECRET" ] && export PLAID_SECRET="${PLAID_SECRET}"
 [ -n "$PLAID_ENV" ] && export PLAID_ENV="${PLAID_ENV}"
 
-# Call the original docker-entrypoint script
-echo "Running original docker-entrypoint script..."
-/rails/bin/docker-entrypoint
-
-# Start the Rails server
-exec ./bin/rails server
+# Pass through to original entrypoint with CMD arguments
+exec /rails/bin/docker-entrypoint "$@"
