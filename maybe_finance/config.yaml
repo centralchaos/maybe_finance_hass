@@ -10,9 +10,8 @@ arch:
   - armv7
 startup: application
 boot: auto
-
 ports:
-  3000/tcp: 3001
+  3001/tcp: 3001
 map:
   - "data:rw"
 build:
@@ -20,12 +19,13 @@ build:
   args:
     BUILD_ARCH: "{arch}"
 version: 0.3.0
+# Environment variables set here are passed to the container at runtime
 environment:
-  DB_HOST: "172.30.32.1" # Home Assistant's default gateway IP
+  DB_HOST: "172.30.32.1"
   DB_PORT: "5432"
   POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: homeassistant # Default password from Postgres addon
-  SECRET_KEY_BASE: "TEST"
+  POSTGRES_PASSWORD: homeassistant
+  SECRET_KEY_BASE: "generate_a_secure_key_here"
   SELF_HOSTED: "true"
   DISABLE_SSL: "false"
   HOSTING_PLATFORM: "localhost"
