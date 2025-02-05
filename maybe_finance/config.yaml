@@ -12,8 +12,10 @@ startup: application
 boot: auto
 #ingress: true
 #ingress_port: 3000
+webui: "[PROTO:rails_force_ssl]://[HOST]:[PORT:3000]"
+url: https://github.com/M123-dev/maybe_finance_hass
 ports:
-  3000/tcp: 3000
+  3000/tcp: 1234
 map:
   - "data:rw"
 schema:
@@ -45,4 +47,4 @@ build:
   dockerfile: Dockerfile
   args:
     BUILD_ARCH: "{arch}"
-version: 0.3.6
+version: 0.3.1
