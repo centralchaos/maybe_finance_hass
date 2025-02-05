@@ -47,6 +47,11 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 # Final stage
 FROM base
 
+# Create storage directory in mapped volume path
+RUN mkdir -p /data/storage && \
+    ln -s /data/storage /rails/storage && \
+    chmod -R 777 /data
+
 # Clean up
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
