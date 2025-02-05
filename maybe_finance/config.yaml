@@ -10,8 +10,8 @@ arch:
   - armv7
 startup: application
 boot: auto
-ingress: true
-ingress_port: 3000
+#ingress: true
+#ingress_port: 3000
 ports:
   3000/tcp: 3000
 map:
@@ -45,4 +45,4 @@ build:
   dockerfile: Dockerfile
   args:
     BUILD_ARCH: "{arch}"
-version: 0.3.5
+version: 0.3.6

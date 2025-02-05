@@ -1,12 +1,12 @@
-# maybe_finance_hass
+# Maybe Finance Addon for Homeassistant
 
 ## Introduction
 
 Maybe Finance is a personal finance management application that helps you track your expenses, income, and investments. This addon allows you to run Maybe Finance within Home Assistant as an addon.
 
-## Disclaimer
+> [!IMPORTANT]
+> The installation of this addon could take multiple minutes since the image is currently built on the device.
 
-The installation of this addon could take multiple minutes since the image is built on the device.
 
 ## Installation
 

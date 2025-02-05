@@ -71,6 +71,4 @@ RUN mkdir -p /data && chmod -R 777 /data
 # Entrypoint prepares the database.
 ENTRYPOINT ["/usr/local/bin/run.sh"]
 
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
 CMD ["./bin/rails", "server"]
