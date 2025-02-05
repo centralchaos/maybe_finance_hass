@@ -4,11 +4,11 @@ FROM --platform=${BUILD_ARCH} alpine/git AS clone
 WORKDIR /src
 RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
-    git checkout tags/v0.3.0
+    git checkout main
 
 # Stage 2: Base image with necessary dependencies
 ARG BUILD_ARCH
-FROM --platform=${BUILD_ARCH} ruby:3.3.5-slim AS base
+FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
 
 # Install base packages
 RUN apt-get update -qq && \

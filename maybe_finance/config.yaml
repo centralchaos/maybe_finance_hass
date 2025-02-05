@@ -22,7 +22,7 @@ schema:
   db_host: str?
   db_port: str?
   postgres_user: str?
-  app_domain: str
+#  app_domain: str
   plaid_client_id: str?
   plaid_secret: str?
   plaid_env: str?
@@ -37,4 +37,4 @@ build:
   dockerfile: Dockerfile
   args:
     BUILD_ARCH: "{arch}"
-version: 0.3.0
+version: 0.3.2
