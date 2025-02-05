@@ -10,6 +10,8 @@ arch:
   - armv7
 startup: application
 boot: auto
+ingress: true
+ingress_port: 3001
 ports:
   3000/tcp: 3001
 map:
@@ -30,7 +32,7 @@ options:
   db_host: "172.30.32.1"
   db_port: "5432"
   postgres_user: "postgres"
-  app_domain: "http://localhost"
+#  app_domain: "http://localhost"
 build:
   dockerfile: Dockerfile
   args:
