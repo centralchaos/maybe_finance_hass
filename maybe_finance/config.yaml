@@ -51,9 +51,11 @@ version: 0.3.5
 #  args:
 #    BUILD_ARCH: "{arch}"
 image: ghcr.io/m123-dev/{arch}-maybe_finance_homeassistant
-build_from:
-  armv7: "ghcr.io/home-assistant/armv7-base:latest"
-  amd64: "ghcr.io/home-assistant/amd64-base:latest"
-  armhf: "ghcr.io/home-assistant/armhf-base:latest"
-  aarch64: "ghcr.io/home-assistant/aarch64-base:latest"
-  i386: "ghcr.io/home-assistant/i386-base:latest"
+#build_from:
+#  armv7: "ghcr.io/home-assistant/armv7-base:latest"
+#  amd64: "ghcr.io/home-assistant/amd64-base:latest"
+#  armhf: "ghcr.io/home-assistant/armhf-base:latest"
+#  aarch64: "ghcr.io/home-assistant/aarch64-base:latest"
+#  i386: "ghcr.io/home-assistant/i386-base:latest"
+
+

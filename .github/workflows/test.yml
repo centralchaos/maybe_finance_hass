@@ -16,22 +16,6 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
-
-        # Enable Ruby Cache: Store Bundler gems between builds
-      - name: Cache Bundler Gems
-        uses: actions/cache@v3
-        with:
-          path: /usr/local/bundle
-          key: ${{ runner.os }}-bundler-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-bundler-
-
-      # ✅ Pre-install Bundler gems outside of Docker to use cache
-      - name: Install Bundler Dependencies
-        run: |
-          bundle config set path '/usr/local/bundle'
-          bundle install
-
       - name: Test build
         uses: home-assistant/builder@master
         with:
@@ -40,4 +24,3 @@ jobs:
             --${{ matrix.arch }} \
             --target maybe_finance \
             --docker-hub "ghcr.io/${{ github.repository_owner }}" \
-
