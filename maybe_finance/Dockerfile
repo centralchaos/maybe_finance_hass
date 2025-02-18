@@ -1,5 +1,6 @@
 # Stage 1: Clone the Maybe Finance repository
 ARG BUILD_FROM
+ARG BUILD_ARCH
 FROM $BUILD_FROM AS clone
 WORKDIR /src
 RUN apk add --no-cache git && \
@@ -7,7 +8,6 @@ RUN apk add --no-cache git && \
     git checkout e9b29f67268e326a8ed3ec53d07351187cc31fd7
 
 # Stage 2: Base image with necessary dependencies
-ARG BUILD_ARCH
 FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
 
 # Install base packages
