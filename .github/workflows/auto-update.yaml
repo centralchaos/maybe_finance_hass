@@ -43,7 +43,7 @@ jobs:
         if: env.UPDATE_NEEDED == 'true'
         run: |
           VERSION=$(grep -oP '(?<=version: )\d+\.\d+\.\d+' maybe_finance/config.yaml)
-          NEW_VERSION=$(echo $VERSION | awk -F. '{$NF+=1; OFS="."; print $0}')
+          NEW_VERSION=$(echo $VERSION | awk -F. '{$NF+=1; print $1"."$2"."$3}')
           sed -i "s/$VERSION/$NEW_VERSION/" maybe_finance/config.yaml
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
