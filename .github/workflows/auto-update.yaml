@@ -1,0 +1,67 @@
+name: Auto-Update Repo
+
+on:
+  schedule:
+    - cron: '0 14 * * *'  # Runs daily at 15:00 Berlin time (UTC+1)
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  update-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get latest commit hash
+        run: |
+          LATEST_COMMIT=$(git ls-remote https://github.com/maybe-finance/maybe.git HEAD | awk '{print $1}')
+          echo "LATEST_COMMIT=$LATEST_COMMIT" >> $GITHUB_ENV
+
+      - name: Get current commit hash from Dockerfile
+        run: |
+          CURRENT_COMMIT=$(grep -oP '(?<=git checkout )\w{40}' maybe_finance/Dockerfile)
+          echo "CURRENT_COMMIT=$CURRENT_COMMIT" >> $GITHUB_ENV
+
+      - name: Compare commit hashes
+        id: check_update
+        run: |
+          if [ "$LATEST_COMMIT" != "$CURRENT_COMMIT" ]; then
+            echo "UPDATE_NEEDED=true" >> $GITHUB_ENV
+          else
+            echo "UPDATE_NEEDED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Update commit hash in Dockerfile
+        if: env.UPDATE_NEEDED == 'true'
+        run: |
+          sed -i "s/$CURRENT_COMMIT/$LATEST_COMMIT/" maybe_finance/Dockerfile
+
+      - name: Bump patch version in config.yaml
+        if: env.UPDATE_NEEDED == 'true'
+        run: |
+          VERSION=$(grep -oP '(?<=version: )\d+\.\d+\.\d+' maybe_finance/config.yaml)
+          NEW_VERSION=$(echo $VERSION | awk -F. '{$NF+=1; OFS="."; print $0}')
+          sed -i "s/$VERSION/$NEW_VERSION/" maybe_finance/config.yaml
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Commit and push changes
+        if: env.UPDATE_NEEDED == 'true'
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout -b update-maybe-$NEW_VERSION
+          git add maybe_finance/Dockerfile maybe_finance/config.yaml
+          git commit -m "Update Maybe Finance to $LATEST_COMMIT and bump version to $NEW_VERSION"
+          git push origin update-maybe-$NEW_VERSION
+
+      - name: Create or update Pull Request
+        if: env.UPDATE_NEEDED == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-maybe-$NEW_VERSION
+          title: "Update Maybe Finance to latest commit"
+          body: "This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) and bumps the patch version to $NEW_VERSION."
+          labels: "automated update"
