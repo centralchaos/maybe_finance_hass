@@ -1,4 +1,4 @@
-name: Auto-Update Repo
+name: Update Maybe Finance Repo
 
 on:
   schedule:
@@ -12,7 +12,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MAYBE_HASS_RELEASE }}
+          fetch-depth: 0
 
       - name: Get latest commit hash
         run: |
@@ -51,7 +52,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git checkout -b update-maybe-$NEW_VERSION
+          git checkout -b update-maybe-$NEW_VERSION || git checkout update-maybe-$NEW_VERSION
           git add maybe_finance/Dockerfile maybe_finance/config.yaml
           git commit -m "Update Maybe Finance to $LATEST_COMMIT and bump version to $NEW_VERSION"
           git push origin update-maybe-$NEW_VERSION
@@ -60,7 +61,7 @@ jobs:
         if: env.UPDATE_NEEDED == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MAYBE_HASS_RELEASE }}
           branch: update-maybe-$NEW_VERSION
           title: "Update Maybe Finance to latest commit"
           body: "This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) and bumps the patch version to $NEW_VERSION."
