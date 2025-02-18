@@ -1,12 +1,12 @@
 # Stage 1: Clone the Maybe Finance repository
-ARG BUILD_FROM
 ARG BUILD_ARCH
-FROM $BUILD_FROM AS clone
+FROM --platform=${BUILD_ARCH} alpine/git AS clone
 WORKDIR /src
 RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
     git checkout e9b29f67268e326a8ed3ec53d07351187cc31fd7
 
+# -------------------------------------------------
 # Stage 2: Base image with necessary dependencies
 FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
 
@@ -25,6 +25,7 @@ ENV RAILS_ENV="production" \
 WORKDIR /rails
 COPY --from=clone /src /rails
 
+# -------------------------------------------------
 # Stage 3: Build stage
 FROM base AS build
 
@@ -53,6 +54,7 @@ RUN bundle exec bootsnap precompile --gemfile -j 0
 RUN bundle exec bootsnap precompile -j 0 app/ lib/
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
+# -------------------------------------------------
 # Final stage
 FROM base
 
