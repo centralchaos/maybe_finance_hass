@@ -7,13 +7,8 @@ RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
     git checkout e9b29f67268e326a8ed3ec53d07351187cc31fd7
 
-# Normalize BUILD_ARCH for armv7
-ARG NORMALIZED_ARCH=${BUILD_ARCH}
-RUN if [ "$BUILD_ARCH" = "armv7" ]; then echo "Using armhf instead of armv7"; NORMALIZED_ARCH="arm/v7"; fi
-ENV FINAL_ARCH=$NORMALIZED_ARCH
-
 # Stage 2: Base image with necessary dependencies
-FROM --platform=${FINAL_ARCH} ruby:3.4.1-slim AS base
+FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
 
 # Install base packages
 RUN apt-get update -qq && \
