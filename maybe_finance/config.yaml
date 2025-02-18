@@ -6,10 +6,10 @@ slug: maybe_finance
 init: false
 arch:
   - armhf
-  - armv7
   - aarch64
   - amd64
-  - i386
+#  - armv7
+#  - i386
 startup: application
 boot: auto
 #ingress: true

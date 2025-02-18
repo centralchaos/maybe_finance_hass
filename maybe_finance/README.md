@@ -13,7 +13,7 @@
 
 See the main repository here: [Maybe Finance GitHub Repository](https://github.com/maybe-finance/maybe)
 
-> **Note:**
+> [!NOTE]
 > The add-on is currently not following the same version numbers as Maybe Finance itself but coming from a newer main branch.
 
 ---
@@ -71,6 +71,10 @@ http://homeassistant.local:1234
 Additionally, there is a **button in the addon interface** to open the web UI directly.
 
 ---
+
+> [!NOTE]
+> Currently the build for armv7 is broken, if someone is interested in fixing hit me up. i386 seems to be harder since there is no ruby:slim for this architecture.
+
 
 ## Contributing
 
