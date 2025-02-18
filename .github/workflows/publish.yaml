@@ -16,7 +16,23 @@ jobs:
         #armhf,
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses:
+          actions/checkout@v3
+
+          # ✅ Enable Ruby Cache: Store Bundler gems between builds
+      - name: Cache Bundler Gems
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bundle
+          key: ${{ runner.os }}-bundler-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bundler-
+
+      # ✅ Pre-install Bundler gems outside of Docker to use cache
+      - name: Install Bundler Dependencies
+        run: |
+          bundle config set path '/usr/local/bundle'
+          bundle install
 
       - name: Login to the Github container registry
         uses: docker/login-action@v2
