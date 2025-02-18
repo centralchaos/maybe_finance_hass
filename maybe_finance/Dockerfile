@@ -36,12 +36,13 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists/*
 
 # Install gems
-RUN bundle install
-RUN rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
-RUN bundle exec bootsnap precompile --gemfile
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    bundle exec bootsnap precompile --gemfile
 
 # Precompile bootsnap and assets
-RUN bundle exec bootsnap precompile -j 0 app/ lib/
+#RUN bundle exec bootsnap precompile -j 0 app/ lib/
+RUN bundle exec bootsnap precompile app/ lib/
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage

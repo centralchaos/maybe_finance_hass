@@ -10,9 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        architecture: [armhf, amd64, aarch64]
+        architecture: [amd64, aarch64]
         #i386
         #armv7,
+        #armhf,
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3

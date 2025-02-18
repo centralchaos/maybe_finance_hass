@@ -72,8 +72,12 @@ Additionally, there is a **button in the addon interface** to open the web UI di
 
 ---
 
-> [!NOTE]
-> Currently the build for armv7 is broken, if someone is interested in fixing hit me up. i386 seems to be harder since there is no ruby:slim for this architecture.
+Architectures
+- amd64
+- aarch64
+- Currently the build for armv7 is broken, if someone is interested in fixing hit me up.
+- i386 seems to be harder since there is no ruby:slim for this architecture.
+- The Tailwindcss library used by maybe does not support armhf
 
 
 ## Contributing

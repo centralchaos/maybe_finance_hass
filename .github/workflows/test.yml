@@ -9,9 +9,10 @@ jobs:
     strategy:
       fail-fast: false # Prevents cancellation of remaining jobs if one fails
       matrix:
-        arch: [armhf, amd64, aarch64]
+        arch: [amd64, aarch64]
         #armv7,
         #i386
+        #armhf,
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
