@@ -13,9 +13,8 @@ FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
 # Install base packages
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-    curl libvips postgresql-client jq bash
-# && \
-# rm -rf /var/lib/apt/lists/*
+    curl libvips postgresql-client jq bash && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set production environment
 ENV RAILS_ENV="production" \
@@ -23,9 +22,8 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
-# Copy cloned source code
-COPY --from=clone /src /rails
 WORKDIR /rails
+COPY --from=clone /src /rails
 
 # Stage 3: Build stage
 FROM base AS build
@@ -33,17 +31,22 @@ FROM base AS build
 # Install build dependencies
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-    curl libvips postgresql-client jq bash build-essential git libpq-dev pkg-config
+    curl libvips postgresql-client jq bash build-essential git libpq-dev pkg-config && \
+    rm -rf /var/lib/apt/lists/*
 
-# && \
-# rm -rf /var/lib/apt/lists/*
+# Instead of copying from the build context, copy Gemfile and Gemfile.lock from the clone stage
+COPY --from=clone /src/Gemfile /rails/Gemfile
+COPY --from=clone /src/Gemfile.lock /rails/Gemfile.lock
+
+
+WORKDIR /rails
 
 # Install gems
 RUN bundle install
 RUN rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 RUN bundle exec bootsnap precompile --gemfile -j 0
 
-COPY . .
+
 
 # Precompile bootsnap and assets
 #RUN bundle exec bootsnap precompile -j 0 app/ lib/
@@ -57,7 +60,7 @@ FROM base
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
+COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
 # Copy startup script
