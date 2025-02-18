@@ -43,8 +43,9 @@ options:
   rails_force_ssl: false
   rails_assume_ssl: false
   good_job_execution_mode: "async"
-build:
-  dockerfile: Dockerfile
-  args:
-    BUILD_ARCH: "{arch}"
+#build:
+#  dockerfile: Dockerfile
+#  args:
+#    BUILD_ARCH: "{arch}"
 version: 0.3.3
+image: ghcr.io/alexbelgium/{arch}-maybe_finance
