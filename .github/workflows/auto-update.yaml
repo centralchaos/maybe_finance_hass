@@ -52,10 +52,10 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git checkout -b update-maybe-$NEW_VERSION || git checkout update-maybe-$NEW_VERSION
+          git checkout -B update-maybe-$NEW_VERSION
           git add maybe_finance/Dockerfile maybe_finance/config.yaml
           git commit -m "Update Maybe Finance to $LATEST_COMMIT and bump version to $NEW_VERSION"
-          git push origin update-maybe-$NEW_VERSION
+          git push -f origin update-maybe-$NEW_VERSION
 
       - name: Create or update Pull Request
         if: env.UPDATE_NEEDED == 'true'
