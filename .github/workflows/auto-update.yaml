@@ -47,15 +47,18 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           sed -i "s/$VERSION/$NEW_VERSION/" maybe_finance/config.yaml
 
-      - name: Create or update Pull Request
-        if: env.UPDATE_NEEDED == 'true'
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.MAYBE_HASS_RELEASE }}
-          base: main
-          branch: update-maybe-${{ env.NEW_VERSION }}
-          title: "Update Maybe Finance to latest commit"
-          body: "This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) and bumps the patch version to $NEW_VERSION."
-          labels: "automated update"
-          delete-branch: true
-          draft: false
+          - name: Create or update Pull Request
+          if: env.UPDATE_NEEDED == 'true'
+          uses: peter-evans/create-pull-request@v5
+          with:
+            token: ${{ secrets.MAYBE_HASS_RELEASE }}
+            base: main
+            branch: update-maybe-${{ env.NEW_VERSION }}
+            title: "Update Maybe Finance to latest commit"
+            body: |
+              This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) 
+              and bumps the patch version to **${{ env.NEW_VERSION }}**.
+            labels: "automated update"
+            delete-branch: true
+            draft: false
+  
