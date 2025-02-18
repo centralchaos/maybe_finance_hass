@@ -1,6 +1,7 @@
 # Stage 1: Clone the Maybe Finance repository
 ARG BUILD_ARCH
-FROM --platform=${BUILD_ARCH} alpine/git AS clone
+ARG BUILD_FROM
+FROM --platform=$BUILD_ARCH $BUILD_FROM AS clone
 WORKDIR /src
 RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
