@@ -57,7 +57,7 @@ jobs:
          token: ${{ secrets.MAYBE_HASS_RELEASE }}
          base: main
          branch: update-maybe-${{ env.NEW_VERSION }}
-         title: "Update Maybe Finance to latest commit"
+         title: "chore: Update Maybe Finance to latest commit"
          body: |
              This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) 
              and bumps the patch version to **${{ env.NEW_VERSION }}**.
