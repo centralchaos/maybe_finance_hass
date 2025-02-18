@@ -2,8 +2,8 @@ name: Update Maybe Finance Repo
 
 on:
   schedule:
-    - cron: '0 14 * * *'  # Runs daily at 15:00 Berlin time (UTC+1)
-  workflow_dispatch:  # Allows manual triggering
+    - cron: "0 14 * * *" # Runs daily at 15:00 Berlin time (UTC+1)
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
   update-repo:
@@ -42,26 +42,25 @@ jobs:
       - name: Bump patch version in config.yaml
         if: env.UPDATE_NEEDED == 'true'
         run: |
-            VERSION=$(grep -oP '(?<=version: )\d+\.\d+\.\d+' maybe_finance/config.yaml)
-            IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-            PATCH=$((PATCH + 1))
-            NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-            echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-            sed -i "s/$VERSION/$NEW_VERSION/" maybe_finance/config.yaml
-
+          VERSION=$(grep -oP '(?<=version: )\d+\.\d+\.\d+' maybe_finance/config.yaml)
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          sed -i "s/$VERSION/$NEW_VERSION/" maybe_finance/config.yaml
 
       - name: Create or update Pull Request
         if: env.UPDATE_NEEDED == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
-         token: ${{ secrets.MAYBE_HASS_RELEASE }}
-         base: main
-         branch: update-maybe-${{ env.NEW_VERSION }}
-         title: "chore: Update Maybe Finance to latest commit"
-         body: |
-             This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) 
-             and bumps the patch version to **${{ env.NEW_VERSION }}**.
-         labels: "automated update"
-         delete-branch: true
-         draft: false
+          token: ${{ secrets.MAYBE_HASS_RELEASE }}
+          base: main
+          branch: update-maybe-${{ env.NEW_VERSION }}
+          title: "chore: Update Maybe Finance to latest commit"
+          body: |
+            This PR updates the Maybe Finance repository to the latest commit
+            and bumps the patch version to **${{ env.NEW_VERSION }}**.
+          labels: "automated update"
+          delete-branch: true
+          draft: false
 
