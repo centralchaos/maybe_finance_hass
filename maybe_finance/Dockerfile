@@ -1,7 +1,6 @@
 # Stage 1: Clone the Maybe Finance repository
-ARG BUILD_ARCH
 ARG BUILD_FROM
-FROM --platform=$BUILD_ARCH $BUILD_FROM AS clone
+FROM $BUILD_FROM AS clone
 WORKDIR /src
 RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
