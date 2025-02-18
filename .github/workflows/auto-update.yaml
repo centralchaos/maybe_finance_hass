@@ -47,33 +47,15 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           sed -i "s/$VERSION/$NEW_VERSION/" maybe_finance/config.yaml
 
-      - name: Commit and push changes
-        if: env.UPDATE_NEEDED == 'true'
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          BRANCH_NAME="update-maybe-$NEW_VERSION"
-          git fetch origin "$BRANCH_NAME" || true
-          if git show-ref --verify --quiet refs/remotes/origin/$BRANCH_NAME; then
-            git checkout "$BRANCH_NAME"
-            git pull origin "$BRANCH_NAME"
-          else
-            git checkout -b "$BRANCH_NAME"
-          fi
-          git add maybe_finance/Dockerfile maybe_finance/config.yaml
-          git commit -m "Update Maybe Finance to $LATEST_COMMIT and bump version to $NEW_VERSION" || echo "No changes to commit"
-          git push origin "$BRANCH_NAME"
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-
       - name: Create or update Pull Request
         if: env.UPDATE_NEEDED == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.MAYBE_HASS_RELEASE }}
-          branch: ${{ env.BRANCH_NAME }}
+          base: main
+          branch: update-maybe-${{ env.NEW_VERSION }}
           title: "Update Maybe Finance to latest commit"
           body: "This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) and bumps the patch version to $NEW_VERSION."
           labels: "automated update"
-          delete-branch: false
-          base: main
+          delete-branch: true
           draft: false
