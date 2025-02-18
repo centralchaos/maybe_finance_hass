@@ -15,5 +15,5 @@ jobs:
           args: |
             --test \
             --all \
-            --target maybe_finance \
-            --docker-hub "ghcr.io/${{ github.repository_owner }}" \
+            --target addon-folder \
+            --docker-hub m123ist
