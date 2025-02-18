@@ -5,7 +5,7 @@ FROM $BUILD_FROM AS clone
 WORKDIR /src
 RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
-    git checkout e9b29f67268e326a8ed3ec53d07351187cc31fd7
+    git checkout 79e1a2c0ffd5191fe6c040da68a311e1c1e6beb4
 
 # Stage 2: Base image with necessary dependencies
 FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
