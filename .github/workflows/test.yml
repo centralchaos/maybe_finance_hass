@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false # Prevents cancellation of remaining jobs if one fails
       matrix:
-        arch: [armhf, armv7, amd64, aarch64, i386]
+        arch: [armhf, arm/v7, amd64, aarch64, i386]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -21,3 +21,4 @@ jobs:
             --${{ matrix.arch }} \
             --target maybe_finance \
             --docker-hub "ghcr.io/${{ github.repository_owner }}" \
+
