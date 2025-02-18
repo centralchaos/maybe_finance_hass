@@ -75,5 +75,5 @@ jobs:
           body: "This PR updates the Maybe Finance repository to the latest commit ($LATEST_COMMIT) and bumps the patch version to $NEW_VERSION."
           labels: "automated update"
           delete-branch: false
+          base: main
           draft: false
-          update-existing: true
