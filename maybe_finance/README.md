@@ -13,8 +13,8 @@
 
 See the main repository here: [Maybe Finance GitHub Repository](https://github.com/maybe-finance/maybe)
 
-> **⚠️ Important:**
-> The installation of this addon may take several minutes since the image is currently built on the device.
+> **Note:**
+> The add-on is currently not following the same version numbers as Maybe Finance itself but coming from a newer main branch.
 
 ---
 

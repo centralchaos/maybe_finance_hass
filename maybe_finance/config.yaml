@@ -48,4 +48,4 @@ options:
 #  args:
 #    BUILD_ARCH: "{arch}"
 version: 0.3.3
-image: ghcr.io/alexbelgium/{arch}-maybe_finance
+image: ghcr.io/m123-dev/{arch}-maybe_finance_homeassistant

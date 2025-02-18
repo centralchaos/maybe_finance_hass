@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
-      - name: Login to DockerHub
+      - name: Login to the Github container registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
@@ -19,7 +19,7 @@ jobs:
           password: ${{ secrets.MAYBE_HASS_RELEASE }}
         #  username: ${{ secrets.DOCKERHUB_USERNAME }}
         #  password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Publish
+      - name: Build & Publish
         uses: home-assistant/builder@master
         with:
           args: |
