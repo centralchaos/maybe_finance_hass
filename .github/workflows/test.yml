@@ -10,6 +10,7 @@ jobs:
   test-build:
     name: Test Build
     strategy:
+      fail-fast: false
       matrix:
         architecture: [amd64, aarch64]
     runs-on: ${{ (matrix.architecture == 'amd64' && 'ubuntu-latest') || (matrix.architecture == 'aarch64' && 'ubuntu-22.04-arm') }}
