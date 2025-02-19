@@ -1,25 +1,98 @@
-# Maybe Finance Home Assistant Addon
+# Maybe Finance Addon for Home Assistant
 
-## Overview
+## Introduction
 
-This repository contains the Maybe Finance addon for Home Assistant. Maybe Finance is a personal finance management application that helps you track your expenses, income, and investments. This addon allows you to run Maybe Finance within Home Assistant, providing seamless integration into your smart home ecosystem.
+**Maybe Finance** is a personal finance management application that helps you track your expenses, income, and investments. This addon enables you to run Maybe Finance within Home Assistant as an addon, providing seamless integration into your smart home ecosystem.
 
-
-[Repository containing the code for Maybe Finance](https://github.com/maybe-finance/maybe)
-
-
-## Features
+### Features
 
 - Track income and expenses
 - Monitor investments
+- Seamless integration with Home Assistant
 - Self-hosted for privacy and control
+
+See the main repository here: [Maybe Finance GitHub Repository](https://github.com/maybe-finance/maybe)
+
+> [!NOTE]
+> The add-on is currently not following the same version numbers as Maybe Finance. The last digit 0.0.x is out of sync since we need a new version for this addon very frequently to be up to date. (The hosted version is also mainly on the main branch not following official releases)
+
+---
 
 ## Installation Guide
 
-[Full README here](./maybe_finance/README.md)
+Follow these steps to install and set up the Maybe Finance addon in Home Assistant:
 
-## Links
+### 1. Add the Maybe Finance Repository
 
-- [Main Maybe Finance GitHub Repository](https://github.com/maybe-finance/maybe)
+Add the following repository to Home Assistant:
 
+```
+https://github.com/M123-dev/maybe_finance_hass/
+```
+
+### 2. Install PostgreSQL Addon
+
+You need to install the PostgreSQL addon for database storage. Use the following repository:
+
+```
+https://github.com/alexbelgium/hassio-addons
+```
+
+Once installed, **set a password** for the PostgreSQL addon and start it.
+
+### 3. Install the Maybe Finance Addon
+
+- Go to **Add-on Store** in Home Assistant.
+- Search for **Maybe Finance** and install it.
+
+### 4. Configure the Addon
+
+- Set a **secure secret key** (this is required for authentication security).
+- Use the **same database password** as set in the PostgreSQL addon.
+
+### 5. Start the Maybe Finance Addon
+
+After configuration, start the addon from the Home Assistant interface.
+
+### 6. Access Maybe Finance
+
+Once the addon is running, you can access the Maybe Finance application at:
+
+```
+http://your-home-assistant-ip:1234
+```
+
+or
+
+```
+http://homeassistant.local:1234
+```
+
+Additionally, there is a **button in the addon interface** to open the web UI directly.
+
+---
+
+Architectures
+- amd64
+- aarch64
+- Currently the build for armv7 is broken, if someone is interested in fixing hit me up.
+- i386 seems to be harder since there is no ruby:slim for this architecture.
+- The Tailwindcss library used by maybe does not support armhf
+
+
+## Contributing
+
+If you find any issues or want to contribute, please visit the repository:
+[Maybe Finance Addon GitHub Repository](https://github.com/M123-dev/maybe_finance_hass/)
+
+We welcome contributions in the form of bug reports, feature requests, and pull requests.
+
+- For addon-specific issues or feature requests, please open an issue in the [Maybe Finance Addon Repository](https://github.com/M123-dev/maybe_finance_hass/).
+- If you encounter bugs or have feature requests for the **Maybe Finance** application itself, please open an issue in the [Main Maybe Finance Repository](https://github.com/maybe-finance/maybe).
+
+---
+
+## License
+
+This project is licensed under the **GNU AFFERO GENERAL PUBLIC LICENSE** **Version 3**
 
