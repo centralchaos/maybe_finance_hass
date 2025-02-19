@@ -30,13 +30,14 @@ jobs:
 
       - name: Build Docker image (test only)
         run: |
+          cd maybe_finance
           IMAGE_NAME=ghcr.io/m123-dev/${{ matrix.architecture }}-maybe_finance_homeassistant
           CACHE_IMAGE=ghcr.io/m123-dev/cache-${{ matrix.architecture }}-maybe_finance_homeassistant
 
           docker buildx build \
             --platform linux/${{ matrix.architecture }} \
             --build-arg BUILD_ARCH=${{ matrix.architecture }} \
-            -f maybe_finance/Dockerfile .
+            -f Dockerfile .
 
 #             --cache-from=type=registry,ref=$CACHE_IMAGE \
 #--cache-to=type=registry,ref=$CACHE_IMAGE,mode=max \
