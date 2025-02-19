@@ -1,4 +1,13 @@
-# Stage 1: Clone the Maybe Finance repository
+# syntax=docker/dockerfile:1
+
+# Build image locally using
+# docker buildx build --build-arg BUILD_ARCH=aarch64 .
+# or with amd64
+
+
+############################
+# Stage 1: Clone the Repository
+############################
 ARG BUILD_ARCH
 FROM --platform=${BUILD_ARCH} alpine/git AS clone
 WORKDIR /src
@@ -6,69 +15,75 @@ RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
     git checkout 79e1a2c0ffd5191fe6c040da68a311e1c1e6beb4
 
+############################
 # Stage 2: Base image with necessary dependencies
+############################
 ARG BUILD_ARCH
 FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
 
-# Install base packages
+# Install base packages and clean up in one layer
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-    curl libvips postgresql-client jq bash && \
-    rm -rf /var/lib/apt/lists/*
+      curl \
+      libvips \
+      postgresql-client \
+      jq \
+      bash
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+# Set environment variables
+ENV RAILS_ENV=production \
+    BUNDLE_DEPLOYMENT=1 \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_WITHOUT=development
 
-# Copy cloned source code
-COPY --from=clone /src /rails
 WORKDIR /rails
+# Copy the entire repository from the clone stage
+COPY --from=clone /src/ /rails/
 
+############################
 # Stage 3: Build stage
+############################
 FROM base AS build
 
 # Install build dependencies
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-    build-essential git libpq-dev pkg-config && \
-    rm -rf /var/lib/apt/lists/*
+      build-essential \
+      git \
+      libpq-dev \
+      pkg-config 
 
-# Install gems
-RUN bundle install
-RUN rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
-RUN bundle exec bootsnap precompile --gemfile
+# Leverage Docker caching by copying Gemfile(s) first
+COPY --from=clone /src/Gemfile /rails/Gemfile
+COPY --from=clone /src/Gemfile.lock /rails/Gemfile.lock
+RUN bundle install --jobs `getconf _NPROCESSORS_ONLN`
 
-# Precompile bootsnap and assets
-RUN bundle exec bootsnap precompile app/ lib/
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# Now copy the rest of the application code from the remote repository
+COPY --from=clone /src/ /rails/
 
-# Final stage
-FROM base
+# Clean bundler caches to reduce image size
+RUN rm -rf ~/.bundle/ \
+    "${BUNDLE_PATH}"/ruby/*/cache \
+    "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
-# Create storage directory in mapped volume path
-RUN mkdir -p /data/storage && \
-    ln -s /data/storage /rails/storage && \
-    chmod -R 777 /data
+# Precompile bootsnap and assets in one go
+RUN bundle exec bootsnap precompile --gemfile && \
+    bundle exec bootsnap precompile app/ lib/ && \
+    SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-# Clean up
-RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives
+############################
+# Stage 4: Final image
+############################
+FROM base AS final
 
-# Copy built artifacts
-COPY --from=build /usr/local/bundle /usr/local/bundle
+# Copy built artifacts from the build stage
+COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Copy startup script
+# Copy and set permissions for the startup script
 COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
-# Set permissions to avoid issues with config file
-RUN mkdir -p /data && chmod -R 777 /data
-
-# Keep running as root (no user switch)
-
-# Entrypoint prepares the database.
+WORKDIR /rails
 ENTRYPOINT ["/usr/local/bin/run.sh"]
-
 CMD ["./bin/rails", "server"]
