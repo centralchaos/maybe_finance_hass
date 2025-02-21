@@ -1,0 +1,41 @@
+name: Check Version and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check_version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Fetch last commit to compare changes
+
+      - name: Extract version from config.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' maybe_finance/config.yaml | awk '{print $2}')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Check if version changed
+        id: check_version
+        run: |
+          if git diff HEAD^ HEAD -- maybe_finance/config.yaml | grep '^+version:'; then
+            echo "VERSION_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "VERSION_CHANGED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create Release if Version Changed
+        if: env.VERSION_CHANGED == 'true'
+        uses: actions/create-release@v1
+        with:
+          tag_name: "v${{ env.VERSION }}"
+          release_name: "v${{ env.VERSION }}"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.MAYBE_HASS_RELEASE }}
