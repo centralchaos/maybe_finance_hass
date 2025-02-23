@@ -52,6 +52,7 @@ jobs:
       - name: Create or update Pull Request
         if: env.UPDATE_NEEDED == 'true'
         uses: peter-evans/create-pull-request@v5
+        id: cpr
         with:
           token: ${{ secrets.MAYBE_HASS_RELEASE }}
           base: main
@@ -63,4 +64,11 @@ jobs:
           labels: "automated update"
           delete-branch: true
           draft: false
-
+          
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.PAT }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
