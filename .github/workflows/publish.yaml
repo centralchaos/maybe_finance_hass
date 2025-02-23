@@ -35,12 +35,14 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           cd maybe_finance
-          IMAGE_NAME=ghcr.io/m123-dev/${{ matrix.architecture }}-maybe_finance_homeassistant:${{ env.VERSION }}
+          IMAGE_NAME=ghcr.io/m123-dev/${{ matrix.architecture }}-maybe_finance_homeassistant
+          VERSION=${{ env.VERSION }}
 
           docker buildx build \
             --platform linux/${{ matrix.architecture }} \
             --build-arg BUILD_ARCH=${{ matrix.architecture }} \
-            -t $IMAGE_NAME . \
+            -t $IMAGE_NAME:$VERSION \
+            -t $IMAGE_NAME:latest \
             --push
 
       - name: Logout from GitHub Container Registry
