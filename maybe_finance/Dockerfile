@@ -28,7 +28,8 @@ RUN apt-get update -qq && \
       libvips \
       postgresql-client \
       jq \
-      bash
+      bash \
+      git
 
 # Set environment variables
 ENV RAILS_ENV=production \
@@ -49,7 +50,6 @@ FROM base AS build
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
-      git \
       libpq-dev \
       pkg-config 
 

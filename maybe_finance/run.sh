@@ -21,6 +21,7 @@ SELF_HOSTED=$(jq --raw-output '.self_hosted' "$CONFIG_PATH")
 RAILS_FORCE_SSL=$(jq --raw-output '.rails_force_ssl' "$CONFIG_PATH")
 RAILS_ASSUME_SSL=$(jq --raw-output '.rails_assume_ssl' "$CONFIG_PATH")
 GOOD_JOB_EXECUTION_MODE=$(jq --raw-output '.good_job_execution_mode // "async"' "$CONFIG_PATH")
+REQUIRE_INVITE_CODE=$(jq --raw-output '.require_invite_code // true' "$CONFIG_PATH")
 
 
 echo "DEBUG: Configured values:"
@@ -36,6 +37,7 @@ echo "SELF_HOSTED: $SELF_HOSTED"
 echo "RAILS_FORCE_SSL: $RAILS_FORCE_SSL"
 echo "RAILS_ASSUME_SSL: $RAILS_ASSUME_SSL"
 echo "GOOD_JOB_EXECUTION_MODE: $GOOD_JOB_EXECUTION_MODE"
+echo "REQUIRE_INVITE_CODE: $REQUIRE_INVITE_CODE"
 
 # Export as environment variables
 export POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
@@ -54,7 +56,17 @@ export SELF_HOSTED="${SELF_HOSTED}"
 export RAILS_FORCE_SSL="${RAILS_FORCE_SSL}"
 export RAILS_ASSUME_SSL="${RAILS_ASSUME_SSL}"
 export GOOD_JOB_EXECUTION_MODE="${GOOD_JOB_EXECUTION_MODE}"
+export REQUIRE_INVITE_CODE="${REQUIRE_INVITE_CODE}"
 
+
+# OWN CONFIG, not from the original entrypoint
+export UPGRADES_ENABLED=false
+export UPGRADES_MODE=manual # auto, manual
+export UPGRADES_TARGET=release # `release` or `commit`
+
+export GITHUB_REPO_OWNER=maybe-finance
+export GITHUB_REPO_NAME=maybe
+export GITHUB_REPO_BRANCH=main
 
 # Pass through to original entrypoint with CMD arguments
 exec /rails/bin/docker-entrypoint "$@"
