@@ -2,6 +2,8 @@ name: "Publish"
 on:
   release:
     types: [published]
+  workflow_dispatch: # Allows manual triggering
+
 
 jobs:
   publish:
@@ -43,7 +45,7 @@ jobs:
             --build-arg BUILD_ARCH=${{ matrix.architecture }} \
             -t $IMAGE_NAME:$VERSION \
             -t $IMAGE_NAME:latest \
-            --push
+            --push .
 
       - name: Logout from GitHub Container Registry
         run: |
