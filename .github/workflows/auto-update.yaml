@@ -57,14 +57,14 @@ jobs:
           token: ${{ secrets.MAYBE_HASS_RELEASE }}
           base: main
           branch: update-maybe-${{ env.NEW_VERSION }}
-          title: "chore: Update Maybe Finance to latest commit"
+          title: "chore: Update Maybe Finance to ${{ env.NEW_VERSION }}"
           body: |
             This PR updates the Maybe Finance repository to the latest commit
             and bumps the patch version to **${{ env.NEW_VERSION }}**.
           labels: "automated update"
           delete-branch: true
           draft: false
-          
+
       - name: Enable Pull Request Automerge
         if: steps.cpr.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@v3
@@ -72,3 +72,4 @@ jobs:
           token: ${{ secrets.MAYBE_HASS_RELEASE }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
+
