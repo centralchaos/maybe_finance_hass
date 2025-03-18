@@ -15,6 +15,13 @@ jobs:
           token: ${{ secrets.MAYBE_HASS_RELEASE }}
           fetch-depth: 0
 
+      - name: Debug ls-remote output
+        run: git ls-remote https://github.com/maybe-finance/maybe.git HEAD
+
+      - name: Fetch latest commit via API
+        run: |
+          curl -s https://api.github.com/repos/maybe-finance/maybe/commits/main | jq -r '.sha'
+
       - name: Get latest commit hash
         run: |
           LATEST_COMMIT=$(git ls-remote https://github.com/maybe-finance/maybe.git HEAD | awk '{print $1}')
