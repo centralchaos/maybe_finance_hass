@@ -29,7 +29,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.MAYBE_HASS_RELEASE }}
+          password: ${{ secrets.MAYBE_FINANCE_HASS_MAIN_ACC_FOR_RELEASE }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
