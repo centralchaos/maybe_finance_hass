@@ -2,7 +2,7 @@ name: Update Maybe Finance Repo
 
 on:
   schedule:
-    - cron: "0 14 * * *" # Runs daily at 15:00 Berlin time (UTC+1)
+    - cron: "0 14 * * 5" # Runs daily at 15:00 Berlin time (UTC+1)
   workflow_dispatch: # Allows manual triggering
 
 jobs:
