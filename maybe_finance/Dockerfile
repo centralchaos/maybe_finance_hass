@@ -13,13 +13,13 @@ FROM --platform=${BUILD_ARCH} alpine/git AS clone
 WORKDIR /src
 RUN apk add --no-cache git && \
     git clone https://github.com/maybe-finance/maybe.git . && \
-    git checkout c7d9c944895921a8530cdfef0ef4965405939854
+    git checkout 03a146222d8aa48c4612b9bd2f7ddd7ae47d7e66
 
 ############################
 # Stage 2: Base image with necessary dependencies
 ############################
 ARG BUILD_ARCH
-FROM --platform=${BUILD_ARCH} ruby:3.4.1-slim AS base
+FROM --platform=${BUILD_ARCH} ruby:3.4.4-slim AS base
 
 # Install base packages and clean up in one layer
 RUN apt-get update -qq && \
@@ -27,6 +27,7 @@ RUN apt-get update -qq && \
       curl \
       libvips \
       postgresql-client \
+      libyaml-0-2 \
       jq \
       bash \
       git
@@ -51,7 +52,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
       libpq-dev \
-      pkg-config 
+      pkg-config \
+      libyaml-dev
 
 # Leverage Docker caching by copying Gemfile(s) first
 COPY --from=clone /src/Gemfile /rails/Gemfile
@@ -68,7 +70,7 @@ RUN rm -rf ~/.bundle/ \
 
 # Precompile bootsnap and assets in one go
 RUN bundle exec bootsnap precompile --gemfile && \
-    bundle exec bootsnap precompile app/ lib/ && \
+    bundle exec bootsnap precompile -j 0 app/ lib/ && \
     SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 ############################
