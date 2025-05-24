@@ -46,7 +46,7 @@ options:
   db_host: "172.30.32.1"
   db_port: "5432"
   #redis_url: "redis://redis:6379/1"
-  redis_url: "redis://172.30.32.1:6379/1"
+  redis_url: "redis://3b88f413-redis:6379"
   #  app_domain: "http://localhost"
   self_hosted: true
   rails_force_ssl: false
