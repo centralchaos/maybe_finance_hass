@@ -50,6 +50,8 @@ https://github.com/fabio-garavini/hassio-addons
 
 Once installed, **set a password** for the addon and start it.
 
+Note: This repository also contains a Postgres addon (16), but i had problems with long starting time, thus i recommend the addon by alexbelgium.
+
 
 ### 4. Install the Maybe Finance Addon
 
