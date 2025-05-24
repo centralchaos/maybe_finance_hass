@@ -40,21 +40,34 @@ https://github.com/alexbelgium/hassio-addons
 
 Once installed, **set a password** for the PostgreSQL addon and start it.
 
-### 3. Install the Maybe Finance Addon
+### 3. Install Redis
+
+You need to install the Redis addon for database storage. Use the following repository:
+
+```
+https://github.com/fabio-garavini/hassio-addons
+```
+
+Once installed, **set a password** for the addon and start it.
+
+Note: This repository also contains a Postgres addon (16), but i had problems with long starting time, thus i recommend the addon by alexbelgium.
+
+
+### 4. Install the Maybe Finance Addon
 
 - Go to **Add-on Store** in Home Assistant.
 - Search for **Maybe Finance** and install it.
 
-### 4. Configure the Addon
+### 5. Configure the Addon
 
 - Set a **secure secret key** (this is required for authentication security).
 - Use the **same database password** as set in the PostgreSQL addon.
 
-### 5. Start the Maybe Finance Addon
+### 6. Start the Maybe Finance Addon
 
 After configuration, start the addon from the Home Assistant interface.
 
-### 6. Access Maybe Finance
+### 7. Access Maybe Finance
 
 Once the addon is running, you can access the Maybe Finance application at:
 
