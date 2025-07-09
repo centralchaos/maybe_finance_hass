@@ -15,7 +15,7 @@ boot: auto
 #ingress: true
 #ingress_port: 3000
 webui: "[PROTO:rails_force_ssl]://[HOST]:[PORT:3000]"
-url: https://github.com/M123-dev/maybe_finance_hass
+url: https://github.com/centralchaos/maybe_finance_hass
 ports:
   3000/tcp: 1234
 map:
@@ -58,7 +58,7 @@ version: 0.5.7
 #  dockerfile: Dockerfile
 #  args:
 #    BUILD_ARCH: "{arch}"
-image: ghcr.io/m123-dev/{arch}-maybe_finance_homeassistant
+image: ghcr.io/centralchaos/ke-maybe-hass:latest
 #build_from:
 #  armv7: "ghcr.io/home-assistant/armv7-base:latest"
 #  amd64: "ghcr.io/home-assistant/amd64-base:latest"
