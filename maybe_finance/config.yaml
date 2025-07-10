@@ -2,7 +2,7 @@ name: Maybe Finance
 description: >-
   Maybe Finance is a personal finance management application that helps you
   track your expenses, income, and investments.
-slug: maybe_finance
+slug: maybe_finance_hass
 init: false
 arch:
   - armhf
